@@ -1,0 +1,10 @@
+\(\S\+\)\.interface$
+	// {{$1}} TODO
+	type {{$1}} interface{{{_cursor_}}}
+
+\(\S\+\)\.struct$
+	// {{$1}} TOOD
+	type {{$1}} struct{{{_cursor_}}}
+
+\(\w\+\)\.len$
+	len({{$1}}){{_cursor_}}
