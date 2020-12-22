@@ -7,7 +7,7 @@ import (
 	"github.com/urfave/cli/v2"
 )
 
-var version string = "0.1.0"
+var Version string = "0.1.0"
 
 func main() {
 	newApp().Run(os.Args)
@@ -28,11 +28,11 @@ func newApp() *cli.App {
 	return app
 }
 
-var commands = []cli.Command{
+var commands = []*cli.Command{
 	cmdSay,
 }
 
-var cmdSay = cli.Command{
+var cmdSay = &cli.Command{
 	Name:   "say",
 	Usage:  "hello say",
 	Action: say,
