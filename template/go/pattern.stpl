@@ -6,6 +6,15 @@
 	// {{$1}} TOOD
 	type {{$1}} struct{{{_cursor_}}}
 
-\(\w\+\)\.len$
+\(\S\+\)\.len$
 	len({{$1}}){{_cursor_}}
 
+\(\S\+\)\.wraperr$
+	errors.Wrap({{$1}}, {{_cursor_}})
+
+\(\S\+\)\.eq$
+	if {{$1}} == {{_cursor_}}
+
+\(\S\+\)\.noteq$
+	if {{$1}} != {{_cursor_}}
+ 
