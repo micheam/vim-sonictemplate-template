@@ -4,10 +4,10 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/urfave/cli"
+	"github.com/urfave/cli/v2"
 )
 
-var Version string = "0.1.0"
+var version string = "0.1.0"
 
 func main() {
 	newApp().Run(os.Args)
@@ -18,13 +18,17 @@ func newApp() *cli.App {
 	app.Name = "{{_cursor_}}hello"
 	app.Usage = "Hello Go Cli World."
 	app.Version = Version
-	app.Author = "Michto Maeda"
-	app.Email = "michito.maeda@gmail.com"
-	app.Commands = Commands
+	app.Authors = []*cli.Author{
+		{
+			Name:  "Michito Maeda",
+			Email: "michito.maeda@gmail.com",
+		},
+	}
+	app.Commands = commands
 	return app
 }
 
-var Commands = []cli.Command{
+var commands = []cli.Command{
 	cmdSay,
 }
 
@@ -38,4 +42,3 @@ func say(c *cli.Context) error {
 	fmt.Println("Hello, World")
 	return nil
 }
-
