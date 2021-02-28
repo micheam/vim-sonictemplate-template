@@ -15,6 +15,10 @@
 \(\S\+\)\.eq$
 	if {{$1}} == {{_cursor_}}
 
+\(\S\+\)\.iferr$
+	if {{$1}} != nil {
+		return fmt.Errorf("{{_cursor_}}:%w", {{$1}})
+	}
+
 \(\S\+\)\.noteq$
 	if {{$1}} != {{_cursor_}}
- 
