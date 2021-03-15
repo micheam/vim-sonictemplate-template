@@ -1,46 +1,44 @@
 #!/usr/bin/env bash
-set -eu
+set -e
+
+PROFILE=default
+
 #
-#/ {{_input_:func_name}}
-#/ {{_input_:what_is_this}}
+#/ Usage: {{_input_:script name}} [--help] ARGS
+#/ {{_cursor_}}
 #/
-#/ Simple usage:
+#/ Options:
+#/   --help             show this message.
 #/
-#/    {{_input_:func_name}} [--help, -h]
-#/
-#/ -h,  --help         - This message.
+#/ Examples:
+#/    $ {{_input__:script name}} --helph 
 #
 
-# Public: {{_input_:what_is_this}} function.
-# Returns nothing.
-{{_input_:func_name}}() {
-
-  for arg in "$@"
-  do
-    case "$arg" in
-      -h|--h|--he|--hel|--help|-\?)
-        {{_input_:func_name}}Usage
-        "$0"
-        exit 0
-        ;;
-    esac
-  done
-
-  # do something.
-}
-
-# Internal: Displays the usage.  Pulls this from the file that
-{{_input_:func_name}}Usage() {
-    grep '^#/' "${ORIGINAL_COMMAND_{{_input_:func_name}}}" | cut -c 4-
+usage() {
+    grep '^#/' "${0}" | cut -c 3-
     echo ""
-    set | grep ^VERSION_{{_input_:func_name}}=
 }
 
-VERSION_{{_input_:func_name}}="0.0.1"
-ORIGINAL_COMMAND_{{_input_:func_name}}="$(cd "${BASH_SOURCE[0]%/*}" || exit 1; pwd)/${BASH_SOURCE[0]##*/}"
+_main() {
+  printf "[%s] Hello, %s" $PROFILE ${1:?NAMEを指定してください}
+}
 
-# If sourced, load all functions.
-# If executed, perform the actions as expected.
-if [[ "$0" == "${BASH_SOURCE[0]}" ]] || [[ -z "${BASH_SOURCE[0]}" ]]; then
-  {{_input_:func_name}} "$@"
+while [ -n "$(echo ${1:?引数が必要です} | grep -e '^-')" ]; do
+  case "$1" in
+    -h,--help)
+      usage
+      exit 0
+      ;;
+    --profile)
+      PROFILE=$2
+      shift ;;
+  esac
+done
+
+if [ $# == 0 ]; then
+  usage
+  exit 1
 fi
+
+_main ${1}
+
