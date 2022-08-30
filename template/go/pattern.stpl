@@ -22,3 +22,8 @@
 
 \(\S\+\)\.noteq$
 	if {{$1}} != {{_cursor_}}
+
+\(\S\+\)\.testrun$
+	t.Run("{{$1}}", func(t *testing.T) {
+		{{_cursor_}}
+	})
