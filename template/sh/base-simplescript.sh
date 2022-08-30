@@ -1,44 +1,49 @@
 #!/usr/bin/env bash
 set -e
 
-PROFILE=default
-
 #
-#/ Usage: {{_input_:script name}} [--help] ARGS
-#/ {{_cursor_}}
+#/ Usage: {{_input_:script name}} [-h] [-p PROFILE] ARGS
+#/ 
 #/
 #/ Options:
-#/   --help             show this message.
+#/   -p PROFILE     set PROFILE name.
+#/   -h             show this message.
 #/
 #/ Examples:
-#/    $ {{_input__:script name}} --helph 
+#/    $ {{_input_:script name}} -h
+#/    $ {{_input_:script name}} $(hostname)
+#/    $ {{_input_:script name}} -p DEBUG $(hostname)
 #
 
 usage() {
     grep '^#/' "${0}" | cut -c 3-
     echo ""
+    exit 1
 }
+
+PROFILE=
+NAME=
 
 _main() {
-  printf "[%s] Hello, %s" $PROFILE ${1:?NAMEを指定してください}
+  if [ -n "$PROFILE" ]; then
+    echo -n "[${PROFILE}] "
+  fi
+  echo Hello, $@
 }
 
-while [ -n "$(echo ${1:?引数が必要です} | grep -e '^-')" ]; do
-  case "$1" in
-    -h,--help)
-      usage
-      exit 0
-      ;;
-    --profile)
-      PROFILE=$2
-      shift ;;
+while getopts "hp:" opt; do
+  case $opt in
+    h) usage ;;
+    p) PROFILE="$OPTARG" ;;
+    ?) usage ;;
   esac
 done
 
-if [ $# == 0 ]; then
-  usage
-  exit 1
-fi
+shift $((OPTIND -1))
 
-_main ${1}
+# # need args?
+# if [ $# == 0 ]; then
+#   usage
+# fi
 
+_main $@
